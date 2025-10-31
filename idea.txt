@@ -1,0 +1,28 @@
+Un sistema básico de registro de ventas, hecho en Python con Flet, que permite cargar, editar y eliminar ventas manualmente,
+almacenándolas en un archivo JSON llamado base_ventas.json (que se encuentra en la misma carpeta de todo el proyecto).
+
+Es un proyecto introductorio, centrado en lógica clara, buenas prácticas y una interfaz sencilla pero funcional.
+Es clave que no se rompa.
+
+Objetivo
+
+Crear una aplicación de escritorio simple que:
+
+1 Registre ventas con campos obligatorios y opcionales.
+clase venta ok
+
+
+2 Permita editar los datos (excepto el ID).
+clase venta ok
+
+3 Guarde toda la información localmente en un archivo ventas.json.
+persistencia ok
+
+
+4 Muestre la información en una tabla editable dentro de Flet.
+
+Estructura:
+
+catalogs.py         constantes (estados) en diccionarios
+persistencia.py     funciones para manejo de "base de datos"
+main.py             corazón de la app.
