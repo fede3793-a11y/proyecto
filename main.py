@@ -7,16 +7,16 @@ from definiciones import (Venta, SistemaVentas, estado_plataformas, estado_logis
 def main(page: ft.Page):
     page.title = "Sistema de Ventas"
     page.window_maximized = True
-    page.theme_mode = "light"  # o "dark"
+    page.theme_mode = "light"
     page.horizontal_alignment = "center"
     page.vertical_alignment = "start"
-    sistema = SistemaVentas()  # carga JSON -> objetos Venta
+    sistema = SistemaVentas()
 
 
     notificador = ft.Container(
     visible=False,
     bgcolor="#bbbbbb",
-    border_radius=8,
+    border_radius=6,
     padding=10,
     content=ft.Row(
         [
@@ -38,7 +38,8 @@ def main(page: ft.Page):
 
     def ocultar_mensaje():
         notificador.visible = False
-        page.update()    
+        page.update()
+
 #Campos del formulario--
 
     tf_id = ft.TextField(label="ID de Venta*", width=150, label_style=ft.TextStyle(size=14))
@@ -94,7 +95,7 @@ def main(page: ft.Page):
         options=[ft.dropdown.Option(e) for e in estado_plataformas],
         width=240, label_style=ft.TextStyle(size=14),
     )
-    
+
     dd_estado_logistica = ft.Dropdown(
         label="Estado logística (opcional)",
         hint_text="Seleccioná...",
@@ -128,7 +129,7 @@ def main(page: ft.Page):
         value=None,
         on_change=lambda e: poblar_tabla(),
         border=ft.InputBorder.NONE,)
-    
+
     dd_estado_logistica_header = ft.Dropdown(
         hint_text="Estado logística",
         options=[ft.dropdown.Option("(Vacío)")] + [ft.dropdown.Option(e) for e in estado_logistica],
@@ -136,7 +137,7 @@ def main(page: ft.Page):
         value=None,
         on_change=lambda e: poblar_tabla(),
         border=ft.InputBorder.NONE,)
-    
+
     dd_tipo_logistica_header = ft.Dropdown(
         hint_text="Tipo logística",
         options=[ft.dropdown.Option("(Vacío)")] + [ft.dropdown.Option(e) for e in tipo_logistica],
@@ -162,20 +163,19 @@ def main(page: ft.Page):
         label="Estado plataforma",
         hint_text="Seleccioná...",
         options=[ft.dropdown.Option(e) for e in estado_plataformas],
-        value=None, width=280,
-    )
+        value=None, width=280,)
+
     dd_edit_estado_logistica = ft.Dropdown(
         label="Estado logística",
         hint_text="Seleccioná...",
         options=[ft.dropdown.Option(e) for e in estado_logistica],
-        value=None, width=280,
-    )
+        value=None, width=280,)
+
     dd_edit_tipo_logistica = ft.Dropdown(
         label="Tipo logística",
         hint_text="Seleccioná...",
         options=[ft.dropdown.Option(e) for e in tipo_logistica],
-        value=None, width=280,
-    )
+        value=None, width=280,)
 
     dlg_editar = ft.AlertDialog(
         modal=True,
@@ -194,7 +194,7 @@ def main(page: ft.Page):
     venta_en_edicion = {"id": None}
 
     def _find_venta_by_id(_id):
-        # normaliza tipos: "123" vs 123
+        
         for x in sistema.obtener_ventas():
             if str(x.id_venta) == str(_id):
                 return x
@@ -203,8 +203,9 @@ def main(page: ft.Page):
     def abrir_editor(id_venta: str):
         mostrar_mensaje(f"abrir_editor -> id={id_venta}")  # ping
         v = _find_venta_by_id(id_venta)
+
         if not v:
-            mostrar_mensaje("❌ Venta no encontrada.", color="#a40000", icono="error_outline")
+            mostrar_mensaje("❌ Venta no encontrada.", color="#bbbbbb", icono="error_outline")
             return
 
         venta_en_edicion["id"] = str(id_venta)
@@ -218,32 +219,32 @@ def main(page: ft.Page):
         try:
             # Flet moderno
             page.open(dlg_editar)
-            mostrar_mensaje("Editor abierto (page.open).")
+            mostrar_mensaje("Editor abierto.")
         except Exception:
             # Flet clásico
             page.dialog = dlg_editar
             dlg_editar.open = True
             page.update()
-            mostrar_mensaje("Editor abierto (page.dialog).")
+            mostrar_mensaje("Editor abierto.")
 
     def cerrar_editor():
         try:
-            # Flet moderno
-            dlg_editar.open = False  # por si ya estaba abierto así
+            
+            dlg_editar.open = False
             page.close(dlg_editar)
         except Exception:
-            # Flet clásico
+            
             dlg_editar.open = False
             page.update()
 
     def guardar_editor():
         v = _find_venta_by_id(venta_en_edicion["id"])
         if not v:
-            mostrar_mensaje("❌ Venta no encontrada.", color="#a40000", icono="error_outline")
+            mostrar_mensaje("❌ Venta no encontrada.", color="#bbbbbb", icono="error_outline")
             return
 
         try:
-            # Actualizá sólo lo que el usuario eligió
+            # actualiza sólo lo que el usuario eligió
             if dd_edit_estado_plataforma.value is not None:
                 v.actualizar_estado_plataforma(dd_edit_estado_plataforma.value)
             if dd_edit_estado_logistica.value is not None:
@@ -256,9 +257,9 @@ def main(page: ft.Page):
             poblar_tabla()
             mostrar_mensaje("✅ Estados actualizados.")
 
-        except ValueError as ex:
-            # No cierres el editor: mostrá el motivo y dejá que corrija
-            mostrar_mensaje(f"❌ {ex}", color="#a40000", icono="error_outline")
+        except ValueError as ex:    #sin cerrar editor permite corregir.
+            
+            mostrar_mensaje(f"❌ {ex}", color="#bbbbbb", icono="error_outline")
             page.update()
 
 
@@ -277,36 +278,31 @@ def main(page: ft.Page):
         ],
         rows=[],
     )
-    def _fmt(v):
-        # Vacío/null -> string vacío
+    def _fmt(v):        #deja prolijo el campo fecha
+
         if v is None or str(v).strip() == "":
             return ""
-        # Siempre devolver string
         return str(v)
 
     def poblar_tabla():
-        # 1️⃣ Limpiar filas actuales
         tabla.rows.clear()
 
-        # 2️⃣ Traer todas las ventas (son objetos Venta)
         ventas = sistema.obtener_ventas()
 
-        # 3️⃣ Ordenar por fecha descendente
-        try:
+        try:        #ordena por fecha
             ventas.sort(
                 key=lambda v: datetime.strptime((v.fecha or "1900-01-01"), "%Y-%m-%d"),
                 reverse=True,
             )
         except Exception:
-            pass  # evita crashear si alguna fecha es inválida
+            pass    #evita crashear si alguna fecha es inválida
 
-        # Filtro por ID (texto libre)
-        f_id = (tf_filtro_id.value or "")
+        f_id = (tf_filtro_id.value or "")            #filtro por ID
         if f_id:
             ventas = [v for v in ventas if f_id.lower() in str(v.id_venta or "").lower()]
 
-        # 4️⃣ Filtro por Plataforma
-        f_plat_raw = dd_plataforma_header.value
+
+        f_plat_raw = dd_plataforma_header.value         #filtro plataforma
         f_plat = (f_plat_raw or "")
 
         if f_plat:
@@ -314,8 +310,8 @@ def main(page: ft.Page):
                 v for v in ventas
                 if (v.plataforma or "")== f_plat]
 
-        # 5️⃣ Filtro por Estado plataforma
-        f_estado_raw = dd_estado_plataforma_header.value
+
+        f_estado_raw = dd_estado_plataforma_header.value        #filtro por estado de plat
         f_estado = (f_estado_raw or "")
         if f_estado:
             if f_estado == "(Vacío)":
@@ -323,8 +319,8 @@ def main(page: ft.Page):
             else:
                 ventas = [v for v in ventas if (v.estado_plataforma or "") == f_estado]
 
-        # 6️⃣ Filtro por Estado logística
-        f_log_raw = dd_estado_logistica_header.value
+
+        f_log_raw = dd_estado_logistica_header.value        #filtro por estado log.
         f_log = (f_log_raw or "")
         if f_log:
             if f_log == "(Vacío)":
@@ -332,8 +328,8 @@ def main(page: ft.Page):
             else:
                 ventas = [v for v in ventas if (v.estado_logistica or "") == f_log]
 
-        # Filtro Tipo logística
-        f_tipo_raw = dd_tipo_logistica_header.value
+
+        f_tipo_raw = dd_tipo_logistica_header.value        #filtro por tipo log
         f_tipo = (f_tipo_raw or "")
 
         if f_tipo:
@@ -345,8 +341,7 @@ def main(page: ft.Page):
                     if (v.tipo_logistica or "") == f_tipo
                 ]
 
-        # 7️⃣ Repoblar filas
-        for ven in ventas:
+        for ven in ventas:          #rellena la tabla
             tabla.rows.append(
                 ft.DataRow(
                     cells=[
@@ -374,8 +369,7 @@ def main(page: ft.Page):
         else:
             notificador.visible = False  # oculta mensaje anterior si existía
 
-        # 8️⃣ Refrescar UI
-        tabla.update()
+        tabla.update()      #refresca
         page.update()
 
 
@@ -385,8 +379,7 @@ def main(page: ft.Page):
             dd_plataforma_header,
             dd_estado_plataforma_header,
             dd_estado_logistica_header,
-            dd_tipo_logistica_header,
-        ]:
+            dd_tipo_logistica_header,]:
             dd.value = None
             dd.update()
 
@@ -400,9 +393,9 @@ def main(page: ft.Page):
         mostrar_mensaje("Filtros limpiados.")
 
 
-    # ---------- ACCIONES ----------
+    # Acciones
     def limpiar_form():
-        # ---- TextFields obligatorios ----
+
         tf_id.value = ""
         tf_id.error_text = None
 
@@ -481,7 +474,6 @@ def main(page: ft.Page):
             poblar_tabla()
 
         except Exception as ex:
-            mostrar_mensaje(f"❌ {str(ex)}", color="#bbbbbb", icono="error_outline")
             mostrar_mensaje(f"❌ {str(ex)}", color="#bbbbbb", icono="error_outline")
 
 #Botones--
