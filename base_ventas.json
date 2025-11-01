@@ -1,52 +1,14 @@
 {
     "ventas": [
         {
-            "id_venta": "12345",
-            "plataforma": "Mercado Libre",
-            "nombre": "Juan",
-            "apellido": "Pérez",
-            "fecha": "2024-06-01",
-            "estado_plataforma": "En Proceso",
-            "estado_logistica": "Listo para despachar",
-            "tipo_logistica": "Andreani"
-        },
-        {
-            "id_venta": "12346",
-            "plataforma": "Tienda Nube",
-            "nombre": "Ana",
-            "apellido": "Gómez",
-            "fecha": "2024-06-02",
-            "estado_plataforma": "Completado",
-            "estado_logistica": "Entregado",
-            "tipo_logistica": "Correo Argentino"
-        },
-        {
-            "id_venta": "12347",
-            "plataforma": "Tienda BNA+",
-            "nombre": "Carlos",
-            "apellido": "López",
-            "fecha": "2024-06-03",
-            "estado_plataforma": "Reclamo",
-            "estado_logistica": "Devuelto",
-            "tipo_logistica": "Logística propia"
-        },
-        {
-            "id_venta": "122112",
-            "plataforma": "Tienda Nube",
-            "nombre": "Pepe",
-            "apellido": "Pepote",
-            "fecha": "2025-06-30",
-            "estado_plataforma": "En Proceso"
-        },
-        {
             "id_venta": "4234234",
             "plataforma": "Tienda Nube",
             "nombre": "Jorge",
             "apellido": "Gejor",
             "fecha": "2026-06-12",
-            "estado_plataforma": "Completado",
+            "estado_plataforma": "Anulado",
             "estado_logistica": "Entregado",
-            "tipo_logistica": "Correo Argentino"
+            "tipo_logistica": "Retiro en sucursal"
         },
         {
             "id_venta": "123123",
@@ -55,18 +17,34 @@
             "apellido": "Gejor",
             "fecha": "2026-06-12",
             "estado_plataforma": "En Proceso",
-            "estado_logistica": "Esperando mercadería",
+            "estado_logistica": "En camino",
             "tipo_logistica": "Correo Argentino"
         },
         {
-            "id_venta": "123123123",
+            "id_venta": "ab-013121",
+            "plataforma": "Mercado Libre",
+            "nombre": "LALA",
+            "apellido": "LALO",
+            "fecha": "2025-10-31",
+            "estado_plataforma": "Completado",
+            "estado_logistica": "En camino",
+            "tipo_logistica": "Correo Argentino"
+        },
+        {
+            "id_venta": "aqer-2",
+            "plataforma": "Tienda BNA+",
+            "nombre": "Prueba",
+            "apellido": "Con Banner",
+            "fecha": "2025-10-31",
+            "estado_plataforma": "Completado"
+        },
+        {
+            "id_venta": "122112",
             "plataforma": "Tienda Nube",
-            "nombre": "Ejemplo",
-            "apellido": "De prueba",
-            "fecha": "2025-05-24",
-            "estado_plataforma": "Cancelado",
-            "estado_logistica": "Entregado",
-            "tipo_logistica": "Logística propia"
+            "nombre": "Pepe",
+            "apellido": "Pepote",
+            "fecha": "2025-06-30",
+            "estado_plataforma": "En Proceso"
         }
     ]
 }

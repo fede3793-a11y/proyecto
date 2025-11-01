@@ -94,23 +94,29 @@ class Venta:
         self.tipo_logistica = tipo_logistica or None
 
 
-    def actualizar_estado_plataforma(self, nuevo):
-        if nuevo in _PLAT_SET:
-            self.estado_plataforma = nuevo
-        else:
+    def actualizar_estado_plataforma(self, nuevo_estado):
+        if not nuevo_estado:
+            self.estado_plataforma = None
+            return
+        if nuevo_estado not in estado_plataformas:
             raise ValueError("Estado de plataforma inválido.")
+        self.estado_plataforma = nuevo_estado
 
-    def actualizar_estado_logistica(self, nuevo):
-        if nuevo in _LOGI_SET:
-            self.estado_logistica = nuevo
-        else:
+    def actualizar_estado_logistica(self, nuevo_estado):
+        if not nuevo_estado:
+            self.estado_logistica = None
+            return
+        if nuevo_estado not in estado_logistica:
             raise ValueError("Estado de logística inválido.")
+        self.estado_logistica = nuevo_estado
 
-    def actualizar_tipo_logistica(self, nuevo):
-        if nuevo in _TIPO_SET:
-            self.tipo_logistica = nuevo
-        else:
+    def actualizar_tipo_logistica(self, nuevo_tipo):
+        if not nuevo_tipo:
+            self.tipo_logistica = None
+            return
+        if nuevo_tipo not in tipo_logistica:
             raise ValueError("Tipo de logística inválido.")
+        self.tipo_logistica = nuevo_tipo
 
     # --- Modificar datos cliente ---
     def modificar_datos_cliente(self, nuevo_nombre=None, nuevo_apellido=None, nueva_fecha=None, nueva_plataforma=None):
