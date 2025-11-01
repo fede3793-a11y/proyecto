@@ -13,7 +13,8 @@ def main(page: ft.Page):
 
     sistema = SistemaVentas()  # carga JSON -> objetos Venta
 
-    # ---------- CAMPOS DEL FORM ----------
+#Campos del formulario--
+
     tf_id = ft.TextField(label="ID de Venta*", width=150, label_style=ft.TextStyle(size=14))
 
     dd_plataforma = ft.Dropdown(
@@ -25,22 +26,16 @@ def main(page: ft.Page):
     tf_nombre = ft.TextField(label="Nombre*", width=200, label_style=ft.TextStyle(size=14))
     tf_apellido = ft.TextField(label="Apellido*", width=200, label_style=ft.TextStyle(size=14))
 
-    # ---- DatePicker (popup) ----
-    hoy = date.today()
-    dp = ft.DatePicker(first_date=date(2025, 1, 1), last_date=hoy, value=hoy)
-    page.overlay.append(dp)
 
-    # Campo visible de fecha (permite escribir y/o abrir el picker)
     tf_fecha = ft.TextField(
         label="Fecha (YYYY-MM-DD)*",
-        width=260, label_style=ft.TextStyle(size=14),
-        read_only=False,          # permitir tipeo manual
+        width=260,
+        label_style=ft.TextStyle(size=14),
+        read_only=False,
         suffix_icon="calendar_month",
     )
-    tf_fecha.on_tap = lambda e: dp.pick_date()
 
-    # Validación "live" del formato al escribir
-    def validar_fecha_live(e):
+    def validar_fecha(e):
         v = (tf_fecha.value or "").strip()
         if not v:
             tf_fecha.error_text = None
@@ -51,7 +46,6 @@ def main(page: ft.Page):
             dt = datetime.strptime(v, "%Y-%m-%d").date()
             hoy = date.today()
 
-            # Solo controlás que no sea futura
             if dt > hoy:
                 tf_fecha.error_text = "No se permiten fechas futuras."
             else:
@@ -62,16 +56,8 @@ def main(page: ft.Page):
 
         page.update()
 
-    tf_fecha.on_change = validar_fecha_live
+    tf_fecha.on_change = validar_fecha
 
-    # Cuando el usuario elige en el DatePicker, reflejar en el TextField
-    def on_date_changed(e):
-        if dp.value:
-            tf_fecha.value = dp.value.strftime("%Y-%m-%d")
-            tf_fecha.error_text = None
-            page.update()
-
-    dp.on_change = on_date_changed
 
     dd_estado_plataforma = ft.Dropdown(
         label="Estado plataforma (opcional)",
@@ -89,7 +75,7 @@ def main(page: ft.Page):
         width=240, label_style=ft.TextStyle(size=14)
     )
 
-    # ---------- TABLA DE VENTAS ----------
+#Tabla de ventas--
     tabla = ft.DataTable(
         columns=[
             ft.DataColumn(ft.Text("ID")),
@@ -137,7 +123,7 @@ def main(page: ft.Page):
 
         for dd in [dd_estado_plataforma, dd_estado_logistica, dd_tipo_logistica]:
             dd.value = ""
-            dd.update()
+            dd.update()     #no me sale, no lo limpia :/
 
         page.update()
 
@@ -156,8 +142,10 @@ def main(page: ft.Page):
             sistema.agregar_venta(venta)
             page.snack_bar = ft.SnackBar(ft.Text("✅ Venta agregada correctamente."))
             page.snack_bar.open = True
+
             limpiar_form()
-            poblar_tabla()  # refrescar listado
+            poblar_tabla()
+            
         except Exception as ex:
             page.dialog = ft.AlertDialog(
                 title=ft.Text("Error"),
@@ -180,7 +168,7 @@ def main(page: ft.Page):
     # ---------- LAYOUT ----------
     formulario = ft.Column(
         [
-            ft.Text("Registrar nueva venta", size=20, weight=ft.FontWeight.BOLD),
+            ft.Text("Registrar nueva venta", size=19, weight=ft.FontWeight.BOLD),
             ft.Row([tf_id, dd_plataforma, tf_nombre, tf_apellido, tf_fecha], wrap=True, spacing=10),
             ft.Row([dd_estado_plataforma, dd_estado_logistica, dd_tipo_logistica], wrap=True, spacing=10),
             ft.Row([btn_guardar, btn_limpiar], spacing=10),

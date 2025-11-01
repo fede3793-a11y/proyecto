@@ -57,6 +57,16 @@
             "estado_plataforma": "En Proceso",
             "estado_logistica": "Esperando mercadería",
             "tipo_logistica": "Correo Argentino"
+        },
+        {
+            "id_venta": "123123123",
+            "plataforma": "Tienda Nube",
+            "nombre": "Ejemplo",
+            "apellido": "De prueba",
+            "fecha": "2025-05-24",
+            "estado_plataforma": "Cancelado",
+            "estado_logistica": "Entregado",
+            "tipo_logistica": "Logística propia"
         }
     ]
 }
